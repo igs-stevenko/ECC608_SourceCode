@@ -77,7 +77,6 @@ int IGS_ECC_VerifySignature(unsigned char *Data, size_t DataSize, EC_KEY *Key, u
 
 	ret = ECDSA_do_verify(Data, 32, signature, Key);
 
-	/*釋放記憶體*/
 	ECDSA_SIG_free(signature);
 	return ret;
 }

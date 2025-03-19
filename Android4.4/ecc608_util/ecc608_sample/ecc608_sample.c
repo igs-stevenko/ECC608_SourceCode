@@ -41,8 +41,8 @@ int main(void){
 		0x01, 0xC5, 0xD0, 0x58, 0xC0, 0x49, 0xBD, 0xDA, 
 		0x77, 0xA0, 0x4C, 0xE0, 0x2C, 0x0F, 0x4A, 0x6C
 		*/
-
-		/*	
+		
+		/*
 		0xe6,0x14,0x8c,0xda,0xae,0xdf,0x81,0x59,
 		0xd2,0xd7,0xc0,0xd6,0x49,0x55,0xcf,0x46,
 		0xed,0xf8,0x3e,0xae,0xf3,0xcc,0x11,0x3f,
@@ -52,8 +52,6 @@ int main(void){
 		0x35,0xf5,0x87,0x85,0xc1,0x95,0xd9,0xdc,
 		0x59,0x29,0xab,0x8a,0x96,0x35,0x01,0xcd
 		*/
-
-		
 		0xE6,0x14,0x8C,0xDA,0xAE,0xDF,0x81,0x59,
 		0xD2,0xD7,0xC0,0xD6,0x49,0x55,0xCF,0x46,
 		0xED,0xF8,0x3E,0xAE,0xF3,0xCC,0x11,0x3F,
@@ -62,7 +60,6 @@ int main(void){
 		0xC1,0x75,0x20,0x2A,0xDB,0x48,0x51,0xAE,
 		0x35,0xF5,0x87,0x85,0xC1,0x95,0xD9,0xDC,
 		0x59,0x29,0xAB,0x8A,0x96,0x35,0x01,0xCD
-		
 	};
 
 	unsigned char external_priv_key[32] = {
@@ -92,6 +89,7 @@ int main(void){
 	printf("\n");
 
 	cmd = getchar();
+
 	switch(cmd){
 	
 		case 'a':
@@ -134,11 +132,11 @@ int main(void){
 			rtn = authentication_game(game_pub_key);
 			gettimeofday(&end, NULL);
 			if(rtn != CMD_SUCCESS){
-				//printf("==> authentication failed, rtn = %d\n", rtn);
+				printf("==> authentication failed, rtn = %d\n", rtn);
 			}
 			else{
-				//cost = 1000000 * (end.tv_sec-begin.tv_sec)+ end.tv_usec-begin.tv_usec;
-				//printf("==> authentication success, cost = %ld\n", cost);
+				cost = 1000000 * (end.tv_sec-begin.tv_sec)+ end.tv_usec-begin.tv_usec;
+				printf("==> authentication success, cost = %ld\n", cost);
 			}
 			break;
 		}
@@ -151,26 +149,22 @@ int main(void){
 			unsigned int cost = 0;
 
 			while(1){
-				//gettimeofday(&begin, NULL);
-				//sleep(1);
-				//printf("#\n"); 
-				//count++;
-				//usleep(5000);
+
+				gettimeofday(&begin, NULL);
 				rtn = authentication_game(game_pub_key);
-				//gettimeofday(&end, NULL);
+				gettimeofday(&end, NULL);
 				if(rtn != CMD_SUCCESS){
 					printf("==> authentication failed, rtn = %d, count = %d\n", rtn, count);
 					break;
 				}
 				else{
-					//cost = 1000000 * (end.tv_sec-begin.tv_sec)+ end.tv_usec-begin.tv_usec;
-					//printf("==> authentication success, count = %d, cost = %ld\n", count, cost);
-					printf("### [%s][%d] count = %ld ###\n", __func__, __LINE__, count); 
+					cost = 1000000 * (end.tv_sec-begin.tv_sec)+ end.tv_usec-begin.tv_usec;
+					printf("==> authentication success, count = %d, cost = %ld\n", count, cost);
 				}
 
 				count++;
 
-				//sleep(3);
+				sleep(1);
 			}
 			break;
 		}

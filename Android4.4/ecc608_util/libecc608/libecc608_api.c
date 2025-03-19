@@ -10,6 +10,42 @@
 #include "libecc608_util.h"
 #include "verify.h"
 
+
+int check_ecc608_status(void){
+
+	int rtn = 0;
+	unsigned char config_zone;
+	unsigned char data_zone;
+
+	rtn = ecc608_wakeup();
+	if(rtn != CMD_SUCCESS){
+		return CMD_WAKEUP_FAILED;
+	}
+
+	rtn = ecc608_check_lock_status(&config_zone, &data_zone);
+	if(rtn != CMD_SUCCESS){
+		return CMD_CHECK_STATUS_FAILED;
+	}
+
+	return rtn;
+}
+
+int check_lock_status(unsigned char *config_zone, unsigned char *data_zone){
+
+	int rtn = 0;
+
+	rtn = ecc608_wakeup();
+	if(rtn != CMD_SUCCESS){
+		return CMD_WAKEUP_FAILED;
+	}
+
+	rtn = ecc608_check_lock_status(config_zone, data_zone);
+	if(rtn != CMD_SUCCESS){
+		return CMD_CHECK_STATUS_FAILED;
+	}
+	return rtn;
+}
+
 int _set_config(void){
 
 	int rtn = 0;
@@ -145,18 +181,11 @@ int _lock_data_zone(void){
 }
 
 
-int _authentication_system(unsigned char *pubkey){
+int _authentication_system(unsigned char *pubkey, unsigned char *context){
 
 	int rtn = 0;
 	int i;
-	unsigned char context[32] = {0x00};
 	unsigned char signature[64] = {0x00};
-
-	srand(time(NULL));
-
-	for(i=0; i<32; i++){
-		context[i] = (rand() % 256);
-	}
 
 	rtn = ecc608_wakeup();
 	if(rtn != CMD_SUCCESS){
@@ -174,18 +203,11 @@ int _authentication_system(unsigned char *pubkey){
 	return CMD_SUCCESS;
 }
 
-int _authentication_game(unsigned char *pubkey){
+int _authentication_game(unsigned char *pubkey, unsigned char *context){
 
 	int rtn = 0;
 	int i;
-	unsigned char context[32] = {0x00};
 	unsigned char signature[64] = {0x00};
-
-	srand(time(NULL));
-
-	for(i=0; i<32; i++){
-		context[i] = (rand() % 256);
-	}
 
 	rtn = ecc608_wakeup();
 	if(rtn != CMD_SUCCESS){
@@ -221,13 +243,13 @@ int lock_data_zone(void){
 	return _lock_data_zone();
 }
 
-int authentication_system(unsigned char *pubkey){
+int authentication_system(unsigned char *pubkey, unsigned char *context){
 
-	return _authentication_system(pubkey);
+	return _authentication_system(pubkey, context);
 }
 
-int authentication_game(unsigned char *pubkey){
+int authentication_game(unsigned char *pubkey, unsigned char *context){
 
-	return _authentication_game(pubkey);
+	return _authentication_game(pubkey, context);
 }
 

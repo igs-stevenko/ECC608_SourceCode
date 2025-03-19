@@ -1,17 +1,28 @@
 #ifndef __ECC608_H__
 #define __ECC608_H__
 
+#define PRIVKEY_LEN	32
+#define PUBKEY_LEN	64
+#define CONTEXT_LEN	32
+
 /* 設定ecc608 config，並燒斷 */
 int set_config(void);
 
-/* 設定game key，放入私鑰 */
+/* 設定game key，放入私鑰 
+ * 參數
+ * game_privkey : 私鑰，長度為32Bytes
+ * */
 int set_gamekey(unsigned char *game_privkey);
 
 /* 燒斷key，一旦燒斷便不可再使用set_gamekey() */
 int lock_data_zone(void);
 
-/* 對game key做challenage resopnse，*/
-int authentication_game(unsigned char *pubkey);
+/* 對game key做challenage resopnse
+ * 參數 : 
+ * pubkey : 公鑰，長度為64Bytes
+ * context : 要驗證的數值，放入亂數
+ * */
+int authentication_game(unsigned char *pubkey, unsigned char *context);
 
 /* Parm :
  * config_zone : value = 0 -> unlock, value = 1 -> locked
@@ -19,7 +30,13 @@ int authentication_game(unsigned char *pubkey);
  *
  * Return :
   * value = 0 -> 操作成功, value < 0 -> 操作失敗 */
-int ecc608_check_lock_status(unsigned char *config_zone, unsigned char *data_zone);
+int check_lock_status(unsigned char *config_zone, unsigned char *data_zone);
+
+/*
+ * Return :
+ * value = 0 -> 對ecc608操作成功，, value < 0 -> 對ecc608操作失敗
+ * */
+int check_ecc608_status(void);
 
 /* Return Table */
 enum {
