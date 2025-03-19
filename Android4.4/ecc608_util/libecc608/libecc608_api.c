@@ -181,8 +181,6 @@ int _authentication_game(unsigned char *pubkey){
 	unsigned char context[32] = {0x00};
 	unsigned char signature[64] = {0x00};
 
-	printf("### [%s][%d] ###\n", __func__, __LINE__); 
-
 	srand(time(NULL));
 
 	for(i=0; i<32; i++){
